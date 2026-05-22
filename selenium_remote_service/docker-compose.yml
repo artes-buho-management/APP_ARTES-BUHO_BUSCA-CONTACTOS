@@ -1,0 +1,26 @@
+services:
+  selenium-contacts-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: selenium-contacts-api:latest
+    container_name: selenium-contacts-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      API_TOKEN: "${API_TOKEN:-}"
+      SELENIUM_PAGELOAD_TIMEOUT: "10"
+      SELENIUM_WAIT_AFTER_LOAD_MS: "600"
+      SEARCH_HTTP_TIMEOUT: "10"
+      SEARCH_HTTP_ATTEMPTS: "1"
+      SEARCH_QUERY_TIME_BUDGET_SEC: "12"
+      MAX_SEARCH_QUERIES: "4"
+      MAX_SOURCE_LINKS: "50"
+      MAX_SEARCH_SECONDS: "45"
+      MAX_PAGES_PER_HOST: "4"
+      MAX_LINKS_PER_QUERY: "28"
+      MAX_INTERNAL_LINKS_PER_SOURCE: "2"
+      PAGE_HTTP_TIMEOUT: "7"
+      SELENIUM_FALLBACK_MAX_PER_REQUEST: "2"
+      MIN_SECONDS_LEFT_FOR_SELENIUM: "7"

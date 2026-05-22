@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      :root {
+        --brand-red: #c8102e;
+        --brand-yellow: #ffd447;
+        --brand-white: #ffffff;
+        --brand-text: #1f1f1f;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 14px;
+        color: var(--brand-text);
+        background: var(--brand-white);
+      }
+      .brand-wrap {
+        border: 2px solid var(--brand-red);
+        border-radius: 10px;
+        background: linear-gradient(180deg, #fff4d6 0%, var(--brand-white) 100%);
+        padding: 10px 12px;
+        margin: 0 0 10px;
+      }
+      .brand-company {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--brand-red);
+        line-height: 1.2;
+      }
+      .brand-dev {
+        font-size: 12px;
+        margin-top: 4px;
+        color: var(--brand-text);
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+        color: var(--brand-red);
+      }
+      p {
+        margin: 0 0 10px;
+      }
+      label {
+        display: block;
+        margin: 10px 0 6px;
+        font-weight: bold;
+      }
+      input,
+      select,
+      textarea,
+      button {
+        box-sizing: border-box;
+        width: 100%;
+        font-size: 14px;
+      }
+      textarea {
+        min-height: 84px;
+        resize: vertical;
+        padding: 8px;
+      }
+      input,
+      select {
+        padding: 8px;
+        border: 1px solid #c9c9c9;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .check {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 10px;
+      }
+      .check input {
+        width: auto;
+      }
+      .column-box {
+        margin-top: 8px;
+        border: 1px solid var(--brand-red);
+        border-radius: 8px;
+        background: #fff9e8;
+        padding: 10px;
+      }
+      .column-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .column-actions button {
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 0;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .add-row-btn {
+        background: var(--brand-red);
+        color: var(--brand-white);
+      }
+      .remove-row-btn {
+        background: var(--brand-yellow);
+        color: var(--brand-text);
+      }
+      .column-rows {
+        display: grid;
+        gap: 8px;
+      }
+      .column-row {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 8px;
+      }
+      .actions {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+        gap: 10px;
+      }
+      button {
+        border: 0;
+        padding: 11px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .primary {
+        background: var(--brand-red);
+        color: var(--brand-white);
+      }
+      .danger {
+        background: #8f1528;
+        color: var(--brand-white);
+      }
+      .secondary {
+        background: var(--brand-yellow);
+        color: var(--brand-text);
+      }
+      .warning {
+        background: #5f6b7a;
+        color: var(--brand-white);
+      }
+      .status {
+        margin-top: 12px;
+        background: #fff9e8;
+        border: 1px solid var(--brand-red);
+        border-radius: 8px;
+        padding: 10px;
+        white-space: pre-wrap;
+        font-size: 13px;
+      }
+      .reasoning {
+        margin-top: 10px;
+        border: 1px solid #d8d8d8;
+        border-radius: 8px;
+        background: #fffef9;
+      }
+      .reasoning > summary {
+        cursor: pointer;
+        list-style: none;
+        font-weight: bold;
+        padding: 10px;
+        color: var(--brand-red);
+      }
+      .reasoning > summary::-webkit-details-marker {
+        display: none;
+      }
+      .reasoning-body {
+        border-top: 1px solid #ececec;
+        padding: 10px;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        color: #2f2f2f;
+        background: #fff;
+      }
+      .console {
+        margin-top: 10px;
+        background: #1f1f1f;
+        color: #ffe58a;
+        border-radius: 8px;
+        padding: 10px;
+        font-family: Consolas, monospace;
+        font-size: 12px;
+        min-height: 190px;
+        max-height: 300px;
+        overflow: auto;
+        white-space: pre-wrap;
+      }
+      .hint {
+        font-size: 12px;
+        color: #5a5a5a;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand-wrap">
+      <div class="brand-company" id="brandCompany">&#129417; ARTES B&Uacute;HO</div>
+      <div class="brand-dev" id="brandDeveloper">Desarrollado por RUBEN COTON</div>
+    </div>
+    <h1>&#129417; BUSCA CONTACTOS EN INTERNET</h1>
+    <p class="hint">
+      El proceso usa Google Places API para discovery de empresas y despues valida la web oficial publica de cada entidad para extraer contacto real.
+      Veras la consola en vivo con detalle de cada paso.
+      Se crea/actualiza la pestana TRAZA_OBTENCION con la URL y evidencia de cada contacto guardado.
+    </p>
+    <p class="hint"><strong>Fuente de busqueda:</strong> solo Google Places API. No se hace scraping de Google Search para discovery.</p>
+    <p class="hint"><strong>Exclusiones de prompt:</strong> si escribes <code>-site:dominio.com</code> o <code>-dominio.com</code>, ese dominio queda bloqueado durante la busqueda.</p>
+    <p class="hint"><strong>Modo estricto activo:</strong> si incluyes EMAIL, TELEFONO, NOMBRE CONTACTO o EMPRESA, esos datos se validan siempre en web.</p>
+    <p class="hint"><strong>Sin columnas obligatorias:</strong> solo se exige en modo estricto la columna que tu incluyes en esta busqueda.</p>
+    <p class="hint"><strong>Email profesional:</strong> se descartan emails genericos tipo info@ o contacto@.</p>
+    <p class="hint"><strong>Email mas estricto:</strong> tambien se filtran buzones de rol tipo comunicacion@, prensa@, media@ o events@.</p>
+    <p class="hint"><strong>Auditoria email estricta:</strong> el correo pasa validacion profunda (web + dominio + DNS/MX).</p>
+    <p class="hint"><strong>Contraste de dominio:</strong> el dominio del email se cruza con web/fuente y contexto de entidad para evitar mezclas.</p>
+    <p class="hint"><strong>Segundo plano:</strong> aunque cierres este popup, el proceso sigue ejecutando y luego puedes reanudar estado.</p>
+    <p class="hint"><strong>Modo ULTRA:</strong> auditoria profunda activa; se permite @gmail/@outlook si el correo esta verificado en web real.</p>
+    <p class="hint"><strong>Modo rapido:</strong> primero valida la URL principal y solo abre mas paginas si faltan pruebas.</p>
+    <p class="hint"><strong>Telefono opcional real:</strong> si no pides TELEFONO, no se busca ni se valida telefono.</p>
+    <p class="hint"><strong>Control de calidad:</strong> minimo 3 comprobaciones web por contacto. Si falta un dato de columna se escribe "IA no encuentra".</p>
+    <p class="hint"><strong>Anti-duplicados:</strong> se comprueba el email en tiempo real durante la busqueda y no se guardan repetidos.</p>
+    <p class="hint"><strong>Auto-reintento activo:</strong> si una ventana de tiempo se agota, el proceso continua solo sin detenerse.</p>
+    <p class="hint"><strong>Memoria activa:</strong> el popup recuerda automaticamente tu ultima busqueda y columnas.</p>
+    <label for="query">Que quieres buscar en la web</label>
+    <textarea id="query" placeholder="Ejemplo: empresas de alquiler de sonido"></textarea>
+    <label for="placesApiKey">Google Places API key (opcional si ya estaba guardada)</label>
+    <input id="placesApiKey" type="password" placeholder="Pega la key una vez para guardarla en Script Properties" autocomplete="off" />
+    <p class="hint"><strong>Tip:</strong> si falta la key, pegala aqui y pulsa INICIAR.</p>
+
+    <div class="row">
+      <div>
+        <label for="targetCount">Cantidad de contactos</label>
+        <input id="targetCount" type="number" min="1" max="10000" step="1" />
+      </div>
+      <div>
+        <label for="scope">Alcance</label>
+        <select id="scope">
+          <option value="NACIONAL_ES">Nacional (Espa&ntilde;a)</option>
+          <option value="MUNI_MADRID">Municipal (Madrid ciudad)</option>
+          <option value="PROV_COM_MADRID">Provincial (Comunidad de Madrid)</option>
+          <option value="EUROPEO">Europeo</option>
+          <option value="INTERNACIONAL">Internacional</option>
+        </select>
+      </div>
+    </div>
+    <label for="profile">Perfil de ejecucion</label>
+    <select id="profile">
+      <option value="CALIDAD_MAXIMA">Calidad maxima (preseleccionado)</option>
+      <option value="AGRESIVO_CAUDAL">Agresivo caudal (maximo volumen)</option>
+      <option value="TURBO">Turbo</option>
+      <option value="HIBRIDO_AHORRO">Ahorro inteligente hibrido</option>
+    </select>
+    <p class="hint"><strong>Perfil recomendado:</strong> usa <strong>Agresivo caudal</strong> para volumen maximo o <strong>Calidad maxima</strong> para filtro mas estricto.</p>
+
+    <label>Columnas de salida</label>
+    <div class="column-box">
+      <div class="column-actions">
+        <button type="button" class="add-row-btn" onclick="addColumnRow()">+ A&Ntilde;ADIR FILA</button>
+        <button type="button" class="remove-row-btn" onclick="removeColumnRow()">- QUITAR FILA</button>
+      </div>
+      <div id="columnsRows" class="column-rows"></div>
+    </div>
+    <p class="hint">
+      Cada fila tiene dos celdas:
+      1) cabecera que veras en la hoja,
+      2) descripcion de esa cabecera (ejemplo: correo, telefono, web, empresa).
+    </p>
+
+    <label class="check">
+      <input id="clearPreviousData" type="checkbox" />
+      Limpiar datos anteriores antes de escribir
+    </label>
+
+    <div class="actions">
+      <button class="primary" id="runBtn" onclick="startSearch()">INICIAR</button>
+      <button class="danger" id="cancelBtn" onclick="cancelSearch()" disabled>CANCELAR</button>
+      <button class="warning" onclick="purgeRunningJobs()">PURGAR</button>
+      <button class="warning" onclick="resumeActiveJob()">REANUDAR ESTADO</button>
+      <button class="secondary" onclick="google.script.host.close()">Cerrar</button>
+    </div>
+
+    <div id="status" class="status">Listo para iniciar.</div>
+    <details id="reasoningPanel" class="reasoning">
+      <summary>VER QUE ESTA HACIENDO LA IA (RESUMEN CLARO)</summary>
+      <div id="reasoningBody" class="reasoning-body">Aun no hay ejecucion activa.</div>
+    </details>
+    <div id="console" class="console">Consola preparada.
+</div>
+
+    <script>
+      const defaults = <?!= defaultsJson ?>;
+      const branding = <?!= brandingJson ?>;
+      let runningJobId = "";
+      let polling = false;
+      let lastSeenLogLine = "";
+      let pollFailureStreak = 0;
+      let sessionLogs = [];
+
+      function getErrorMessage(err) {
+        if (!err) return "Error desconocido";
+        if (typeof err === "string") return err;
+        if (err && typeof err.message === "string") return err.message;
+        try {
+          return JSON.stringify(err);
+        } catch (jsonErr) {
+          return String(err);
+        }
+      }
+
+      function isTransientPollError(message) {
+        const msg = String(message || "").toLowerCase();
+        if (!msg) return false;
+        return /(deadline_exceeded|tempor|timeout|time out|exceeded|storage|almacenamiento|server error|error de servidor|service unavailable|503|429|network|net::|socket)/i.test(msg);
+      }
+
+      function applyBranding() {
+        const company = (branding && branding.company) ? String(branding.company) : "Artes B\u00FAho";
+        const developer = (branding && branding.developer) ? String(branding.developer) : "RUBEN COTON";
+        const colors = (branding && branding.colors) ? branding.colors : {};
+
+        document.getElementById("brandCompany").textContent = `\uD83E\uDD89 ${company}`;
+        document.getElementById("brandDeveloper").textContent = `Desarrollado por ${developer}`;
+
+        const root = document.documentElement;
+        if (colors.red) root.style.setProperty("--brand-red", colors.red);
+        if (colors.yellow) root.style.setProperty("--brand-yellow", colors.yellow);
+        if (colors.white) root.style.setProperty("--brand-white", colors.white);
+        if (colors.textDark) root.style.setProperty("--brand-text", colors.textDark);
+      }
+
+      function setButtons(isRunning) {
+        document.getElementById("runBtn").disabled = isRunning;
+        document.getElementById("cancelBtn").disabled = !isRunning;
+      }
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      function parseDefinitionToRows(definition) {
+        const lines = String(definition || "")
+          .split(/\r?\n/)
+          .map((line) => line.trim())
+          .filter((line) => line);
+        const out = [];
+        lines.forEach((line) => {
+          const idx = line.indexOf("=");
+          if (idx < 0) {
+            out.push({ header: line, description: "" });
+            return;
+          }
+          out.push({
+            header: line.slice(0, idx).trim(),
+            description: line.slice(idx + 1).trim()
+          });
+        });
+        return out;
+      }
+
+      function ensureAtLeastOneRow(rows) {
+        if (!rows.length) {
+          return [{ header: "EMAIL", description: "correo electronico (tipo email)" }];
+        }
+        return rows;
+      }
+
+      function renderColumnRows(rows) {
+        const safeRows = ensureAtLeastOneRow(rows || []);
+        const container = document.getElementById("columnsRows");
+        container.innerHTML = safeRows
+          .map((row) => {
+            const header = escapeHtml(row.header || "");
+            const description = escapeHtml(row.description || "");
+            return `
+              <div class="column-row">
+                <input data-role="header" placeholder="Cabecera (ej: EMAIL)" value="${header}" />
+                <input data-role="description" placeholder="En que consiste (ej: correo electronico)" value="${description}" />
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function readColumnsRows(includeEmptyRows) {
+        const nodes = Array.from(document.querySelectorAll("#columnsRows .column-row"));
+        const rows = nodes.map((node) => ({
+          header: (node.querySelector('input[data-role="header"]') || {}).value || "",
+          description: (node.querySelector('input[data-role="description"]') || {}).value || ""
+        }));
+        if (includeEmptyRows) return rows;
+        return rows.filter((row) => row.header.trim() || row.description.trim());
+      }
+
+      function addColumnRow() {
+        const rows = readColumnsRows(true);
+        rows.push({ header: "", description: "" });
+        renderColumnRows(rows);
+      }
+
+      function removeColumnRow() {
+        const rows = readColumnsRows(true);
+        if (rows.length <= 1) {
+          renderColumnRows([{ header: "", description: "" }]);
+          return;
+        }
+        rows.pop();
+        renderColumnRows(rows);
+      }
+
+      function rowsToDefinition(rows) {
+        return rows
+          .map((row) => `${String(row.header || "").trim()}=${String(row.description || "").trim()}`)
+          .filter((line) => !line.startsWith("="))
+          .join("\n");
+      }
+
+      function readForm() {
+        const rows = readColumnsRows(false);
+        return {
+          geminiApiKey: "",
+          placesApiKey: document.getElementById("placesApiKey").value || "",
+          query: document.getElementById("query").value,
+          targetCount: Number(document.getElementById("targetCount").value || 0),
+          scope: document.getElementById("scope").value,
+          profile: document.getElementById("profile").value,
+          columnsRows: rows,
+          columnsDefinition: rowsToDefinition(rows),
+          clearPreviousData: document.getElementById("clearPreviousData").checked
+        };
+      }
+
+      function setStatus(text) {
+        document.getElementById("status").textContent = text;
+      }
+
+      function appendConsole(lines) {
+        if (!lines || !lines.length) return;
+        sessionLogs = sessionLogs.concat(lines.map((line) => String(line || ""))).slice(-800);
+        const box = document.getElementById("console");
+        box.textContent += lines.join("\n") + "\n";
+        box.scrollTop = box.scrollHeight;
+        lastSeenLogLine = String(lines[lines.length - 1] || lastSeenLogLine || "");
+        updateReasoningPanel();
+      }
+
+      function clearConsole() {
+        document.getElementById("console").textContent = "";
+        lastSeenLogLine = "";
+        sessionLogs = [];
+        updateReasoningPanel();
+      }
+
+      function appendNewStatusLogs(status) {
+        const logs = (status && Array.isArray(status.lastLogs)) ? status.lastLogs : [];
+        if (!logs.length) return;
+        if (!lastSeenLogLine) {
+          appendConsole(logs.slice(-15));
+          return;
+        }
+        let start = -1;
+        for (let i = logs.length - 1; i >= 0; i -= 1) {
+          if (String(logs[i]) === lastSeenLogLine) {
+            start = i + 1;
+            break;
+          }
+        }
+        if (start < 0) {
+          appendConsole(logs.slice(-6));
+          return;
+        }
+        if (start < logs.length) {
+          appendConsole(logs.slice(start));
+        }
+      }
+
+      function cleanLogLine(line) {
+        return String(line || "")
+          .replace(/^\[\d{2}:\d{2}:\d{2}\]\s*/, "")
+          .replace(/^\[(CLIENTE|ERROR|FIN|PURGADO)\]\s*/, "$1: ")
+          .trim();
+      }
+
+      function findLastLogLine(regex) {
+        for (let i = sessionLogs.length - 1; i >= 0; i -= 1) {
+          const clean = cleanLogLine(sessionLogs[i]);
+          if (regex.test(clean)) return clean;
+        }
+        return "";
+      }
+
+      function updateReasoningPanel(status) {
+        const body = document.getElementById("reasoningBody");
+        if (!body) return;
+
+        if (!sessionLogs.length && !status) {
+          body.textContent = "Aun no hay ejecucion activa.";
+          return;
+        }
+
+        const out = [];
+        const currentStep = findLastLogLine(/^Paso\s+\d+\/\d+:/i);
+        const engine = findLastLogLine(/(Google Places API candidatos|IA Local candidatos|Hibrido candidatos|Gemini candidatos)/i);
+        const sourceReview = findLastLogLine(/^Revision fuentes:/i);
+        const evidenceReview = findLastLogLine(/^Revision evidencias:/i);
+        const accepted = findLastLogLine(/^\+\d+\s+contactos nuevos\./i);
+        const stalled = findLastLogLine(/^Sin contactos nuevos en este paso/i);
+        const detailDrop = findLastLogLine(/^\[DETALLE\]\s+Descartado/i);
+        const detailOk = findLastLogLine(/^\[DETALLE\]\s+Validado/i);
+        const endpointWarn = findLastLogLine(/endpoint hibrido no disponible|bad gateway|cloudflared|http 50\d/i);
+        const genericErr = findLastLogLine(/^ERROR:/i);
+
+        out.push("QUE ESTA HACIENDO AHORA");
+        if (currentStep) out.push("- " + currentStep);
+        else out.push("- Preparando o esperando siguiente paso.");
+
+        out.push("");
+        out.push("MOTOR ACTIVO");
+        if (engine) out.push("- " + engine);
+        else out.push("- Aun sin dato de motor en este ciclo.");
+
+        out.push("");
+        out.push("COMO DECIDE");
+        if (sourceReview) out.push("- Fuentes: " + sourceReview.replace(/^Revision fuentes:\s*/i, ""));
+        if (evidenceReview) out.push("- Evidencias: " + evidenceReview.replace(/^Revision evidencias:\s*/i, ""));
+        if (!sourceReview && !evidenceReview) out.push("- Todavia no hay revision de fuentes/evidencias.");
+
+        out.push("");
+        out.push("ULTIMO RESULTADO");
+        if (accepted) out.push("- " + accepted);
+        if (stalled) out.push("- " + stalled);
+        if (detailOk) out.push("- Ejemplo validado: " + detailOk.replace(/^\[DETALLE\]\s*/i, ""));
+        if (detailDrop) out.push("- Ejemplo descartado: " + detailDrop.replace(/^\[DETALLE\]\s*/i, ""));
+        if (!accepted && !stalled && !detailOk && !detailDrop) out.push("- Todavia no hay resultado cerrado en consola.");
+
+        if (endpointWarn || genericErr) {
+          out.push("");
+          out.push("ALERTA");
+          if (endpointWarn) out.push("- " + endpointWarn);
+          if (genericErr) out.push("- " + genericErr);
+        }
+
+        if (status && typeof status === "object") {
+          out.push("");
+          out.push("RESUMEN DEL PROCESO");
+          out.push(`- Estado: ${status.status || "n/a"}`);
+          out.push(`- Encontrados: ${Number(status.found || 0)}/${Number(status.requested || 0)}`);
+          out.push(`- Restantes: ${Number(status.remaining || 0)}`);
+          out.push(`- Errores: ${Number(status.totalStepErrors || 0)}`);
+        }
+
+        body.textContent = out.join("\n");
+      }
+
+      function startSearch() {
+        if (polling) return;
+        const payload = readForm();
+        clearConsole();
+        setStatus("Creando proceso...");
+        setButtons(true);
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            runningJobId = res.jobId;
+            pollFailureStreak = 0;
+            appendConsole(res.logs || []);
+            appendConsole([`[CLIENTE] Modelo seleccionado: ${res.geminiModel}`]);
+            appendConsole([`[CLIENTE] Perfil: ${res.profileLabel || res.profile || "TURBO"}`]);
+            if (res.backgroundModeEnabled) {
+              appendConsole(["[CLIENTE] Segundo plano activo: puedes cerrar el popup y seguira ejecutando."]);
+            }
+            setStatus(`Proceso activo en segundo plano | Encontrados: ${res.found}/${res.requested}`);
+            updateReasoningPanel(res);
+            polling = true;
+            pollStatus();
+          })
+          .withFailureHandler((err) => {
+            setButtons(false);
+            polling = false;
+            setStatus("Error al iniciar.");
+            appendConsole([`[ERROR] ${err && err.message ? err.message : String(err)}`]);
+          })
+          .startSearchJob(payload);
+      }
+
+      function pollStatus() {
+        if (!runningJobId) {
+          polling = false;
+          setButtons(false);
+          return;
+        }
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            pollFailureStreak = 0;
+            appendConsole(res.logs || []);
+            setStatus(
+              `Estado: ${res.status} | Encontrados: ${res.found}/${res.requested} | Restantes: ${res.remaining || 0} | Errores: ${res.totalStepErrors || 0}`
+            );
+            appendNewStatusLogs(res);
+            updateReasoningPanel(res);
+
+            if (res.done) {
+              polling = false;
+              setButtons(false);
+              appendConsole([`[FIN] ${res.stopMessage}`]);
+              setStatus(`Finalizado | ${res.stopMessage}`);
+              updateReasoningPanel(res);
+              runningJobId = "";
+              return;
+            }
+
+            setTimeout(pollStatus, 2500);
+          })
+          .withFailureHandler((err) => {
+            const msg = getErrorMessage(err);
+            appendConsole([`[ERROR] ${msg}`]);
+            pollFailureStreak += 1;
+
+            if (runningJobId && isTransientPollError(msg) && pollFailureStreak <= 20) {
+              const waitMs = Math.min(30000, 3500 + pollFailureStreak * 1800);
+              setStatus(`Aviso temporal de estado. Reintento automatico en ${Math.ceil(waitMs / 1000)}s...`);
+              setButtons(true);
+              polling = true;
+              updateReasoningPanel();
+              setTimeout(pollStatus, waitMs);
+              return;
+            }
+
+            polling = false;
+            setButtons(false);
+            setStatus("Proceso detenido por error. Pulsa REANUDAR ESTADO para continuar.");
+            updateReasoningPanel();
+            runningJobId = "";
+          })
+          .getSearchJobStatus(runningJobId);
+      }
+
+      function resumeActiveJob() {
+        if (polling) return;
+        setStatus("Buscando proceso activo...");
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (!res || !res.exists || !res.jobId) {
+              setStatus("No hay procesos activos.");
+              appendConsole(["[CLIENTE] No hay procesos activos en segundo plano."]);
+              setButtons(false);
+              return;
+            }
+            runningJobId = res.jobId;
+            const status = res.status || {};
+            appendNewStatusLogs(status);
+            setStatus(
+              `Reanudado | Estado: ${status.status} | Encontrados: ${status.found}/${status.requested} | Restantes: ${status.remaining || 0}`
+            );
+            updateReasoningPanel(status);
+            pollFailureStreak = 0;
+            setButtons(status.status === "running");
+            if (status.status === "running") {
+              polling = true;
+              pollStatus();
+            }
+          })
+          .withFailureHandler((err) => {
+            appendConsole([`[ERROR] ${err && err.message ? err.message : String(err)}`]);
+            setStatus("Error al reanudar estado.");
+            setButtons(false);
+          })
+          .getActiveRunningJobStatus();
+      }
+
+      function cancelSearch() {
+        if (!runningJobId) return;
+        google.script.run
+          .withSuccessHandler(() => {
+            appendConsole(["[CLIENTE] Cancelando proceso..."]);
+            setStatus("Cancelando...");
+            setButtons(false);
+            polling = false;
+            runningJobId = "";
+          })
+          .withFailureHandler((err) => {
+            appendConsole([`[ERROR] ${err && err.message ? err.message : String(err)}`]);
+          })
+          .cancelSearchJob(runningJobId);
+      }
+
+      function purgeRunningJobs() {
+        const yes = confirm("Se van a purgar todos los procesos en marcha. ¿Continuar?");
+        if (!yes) return;
+        google.script.run
+          .withSuccessHandler((res) => {
+            const msg = (res && res.message) ? res.message : "Purgado completado.";
+            appendConsole([`[PURGADO] ${msg}`]);
+            setStatus(msg);
+            polling = false;
+            runningJobId = "";
+            setButtons(false);
+          })
+          .withFailureHandler((err) => {
+            appendConsole([`[ERROR] ${err && err.message ? err.message : String(err)}`]);
+            setStatus("Error al purgar procesos.");
+          })
+          .purgeAllRunningJobs();
+      }
+
+      function fillDefaults() {
+        document.getElementById("query").value = defaults.query || "";
+        document.getElementById("placesApiKey").value = defaults.placesApiKey || "";
+        document.getElementById("targetCount").value = defaults.targetCount || 200;
+        document.getElementById("scope").value = defaults.scope || "NACIONAL_ES";
+        document.getElementById("profile").value = defaults.profile || "CALIDAD_MAXIMA";
+        document.getElementById("clearPreviousData").checked = defaults.clearPreviousData !== false;
+
+        const rows = Array.isArray(defaults.columnsRows) && defaults.columnsRows.length
+          ? defaults.columnsRows
+          : parseDefinitionToRows(defaults.columnsDefinition || "");
+        renderColumnRows(rows);
+      }
+
+      applyBranding();
+      fillDefaults();
+      setTimeout(resumeActiveJob, 300);
+    </script>
+  </body>
+</html>
